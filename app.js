@@ -430,8 +430,8 @@ async function fetchWeatherSingle(lat, lon) {
         };
         
         content.innerHTML = `
-            <div class="weather-metric" style="background:var(--black); color:var(--white);">
-                <span class="desc" style="color:var(--white)">CONDITION</span>
+            <div class="weather-metric">
+                <span class="desc">CONDITION</span>
                 <span class="data">${condition.text}</span>
             </div>
             <div class="weather-metric">
