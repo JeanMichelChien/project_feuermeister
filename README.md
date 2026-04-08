@@ -1,5 +1,7 @@
 # FeuerMeister
 
+🚀 **Live Deployment:** [https://feuer-meister.vercel.app/](https://feuer-meister.vercel.app/)
+
 A fully functional, offline-capable topographic mapping app designed specifically for finding firepits, BBQ shelters, and outdoor rest spots across Switzerland, featuring dynamic weather mapping (Snow & Precipitation conditions).
 
 ## Data Architecture & Filtering
@@ -12,7 +14,7 @@ A fully functional, offline-capable topographic mapping app designed specificall
 2. **Weather Data (Dynamic)**
    - The application relies on **Open-Meteo V1** to cross-examine specific spot coordinates without API keys.
    - It batch-processes points bounding the current screen to provide accurate WMO Weather Code classifications (Sun, Clouds, Rain, Snow) and exact Midday Snow Depths in centimeters.
-   - We utilize **Meteoblue** via hotlinks to offer you detailed 14-day comprehensive forecasting explicitly tied to the exact latitude/longitude of the firepit.
+   - We utilize **Meteoblue** via hotlinks to offer detailed 14-day comprehensive forecasting explicitly tied to the exact latitude/longitude of the firepit.
 
 ## Features
 
