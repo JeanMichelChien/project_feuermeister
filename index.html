@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FEUERMEISTER</title>
+    
+    <!-- Space Grotesk Font for Swiss/Brutalist feel -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+    
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin=""/>
+    
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="app">
+        <!-- Sidebar -->
+        <aside id="sidebar" class="sidebar">
+            <header class="sidebar-header">
+                <h1>FEUERMEISTER</h1>
+                <p class="subtitle">TOPOGRAPHIC DATABASE</p>
+            </header>
+            
+            <div class="controls-section">
+                <div class="control-row">
+                    <label for="date-picker">DATE OF VISIT</label>
+                    <input type="date" id="date-picker" class="input-modern" />
+                </div>
+                
+                <div class="control-row filters">
+                    <label>AMENITIES REQUIRED</label>
+                    <div class="filter-toggles">
+                        <button class="filter-btn" data-filter="roof">SHELTER</button>
+                        <button class="filter-btn" data-filter="wood">WOOD</button>
+                        <button class="filter-btn" data-filter="grate">GRATE</button>
+                        <button class="filter-btn" data-filter="mountain">MOUNTAIN</button>
+                    </div>
+                </div>
+
+                <div class="control-row filters">
+                    <label>SNOW CONDITIONS</label>
+                    <div class="filter-toggles">
+                        <button class="filter-btn" data-filter="snow_none">NO SNOW</button>
+                        <button class="filter-btn" data-filter="snow_some">SOME SNOW</button>
+                    </div>
+                </div>
+
+                <div class="control-row filters">
+                    <label>WEATHER FORECAST</label>
+                    <div style="display: flex; gap: 8px; margin-bottom: 8px;">
+                        <button class="filter-btn" data-filter="weather_sunny">SUNNY</button>
+                        <button class="filter-btn" data-filter="weather_cloudy">CLOUDY</button>
+                        <button id="apply-weather-filter" class="btn-primary" style="margin-left: auto;">APPLY</button>
+                    </div>
+                    <p class="help-text">Filters apply to spots currently visible on map.</p>
+                </div>
+            </div>
+
+            <div id="spot-details" class="spot-details hidden">
+                <h2 id="spot-title">SELECT A SPOT</h2>
+                <div style="display: flex; gap: 16px; margin-bottom: 24px;">
+                    <a id="spot-gps" href="#" target="_blank" class="gps-link">Maps ↗</a>
+                    <a id="spot-osm" href="#" target="_blank" class="gps-link">OSM ↗</a>
+                    <a id="spot-weather" href="#" target="_blank" class="gps-link hidden">Weather ↗</a>
+                </div>
+                
+                <div class="dataset-grid">
+                    <div class="dataset-col">
+                        <span class="label">AMENITIES</span>
+                        <ul id="spot-amenities" class="feature-list minimal-list">
+                            <!-- Populated by JS -->
+                        </ul>
+                    </div>
+                    
+                    <div class="dataset-col">
+                        <span class="label" id="weather-date-label">WEATHER</span>
+                        <div id="weather-content" class="weather-mini-grid">
+                            <!-- Populated by JS -->
+                        </div>
+                    </div>
+                </div>
+                
+                <div style="margin-top: 16px;">
+                    <span class="label">OSM RAW PAYLOAD</span>
+                    <pre id="spot-raw-payload" style="background: #111; color: #fff; padding: 8px; font-size: 8px; overflow-x: auto; max-height: 150px; border: 1px solid var(--black); white-space: pre-wrap; word-wrap: break-word;"></pre>
+                </div>
+            </div>
+            
+            <div id="initial-state" class="initial-state">
+                Displaying topographic data for firepits and BBQ shelters. Set your visit date, apply amenities filters, and select a location.
+            </div>
+        </aside>
+
+        <!-- Main Map Area -->
+        <main id="main-content">
+            <div class="view-toggles">
+                <button id="toggle-map" class="toggle-btn active">MAP VIEW</button>
+                <button id="toggle-list" class="toggle-btn">LIST VIEW</button>
+            </div>
+            
+            <div id="map-container" class="view-container active"></div>
+            
+            <div id="list-container" class="view-container">
+                <div class="list-header">
+                    <span>NAME</span>
+                    <span>COORDINATES</span>
+                    <span>AMENITIES</span>
+                    <span>ACTION</span>
+                </div>
+                <div id="list-items" class="list-items-wrapper"></div>
+            </div>
+            
+            <div id="loading-indicator" class="loading hidden">PROCESSING TRIPLE-VERIFICATION...</div>
+        </main>
+    </div>
+
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+    
+    <!-- App Logic -->
+    <script src="app.js"></script>
+</body>
+</html>
