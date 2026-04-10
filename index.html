@@ -14,55 +14,69 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin=""/>
     
     <!-- Custom Styles -->
-    <link rel="stylesheet" href="style.css?v=2">
+    <link rel="stylesheet" href="style.css?v=3">
 </head>
 <body>
     <div id="app">
         <!-- Sidebar -->
         <aside id="sidebar" class="sidebar">
+
+            <!-- Header: title + subtitle inline -->
             <header class="sidebar-header">
-                <h1>FEUERMEISTER</h1>
-                <p class="subtitle">TOPOGRAPHIC DATABASE</p>
+                <div class="header-row">
+                    <h1>FEUERMEISTER</h1>
+                    <span class="subtitle">TOPOGRAPHIC DATABASE</span>
+                </div>
             </header>
-            
-            <div class="controls-section">
-                <div class="control-row">
-                    <label for="date-picker">DATE OF VISIT</label>
-                    <input type="date" id="date-picker" class="input-modern" />
-                </div>
-                
-                <div class="control-row filters">
-                    <label>AMENITIES REQUIRED</label>
-                    <div class="filter-toggles">
-                        <button class="filter-btn" data-filter="roof">SHELTER</button>
-                        <button class="filter-btn" data-filter="wood">WOOD</button>
-                        <button class="filter-btn" data-filter="grate">GRATE</button>
-                        <button class="filter-btn" data-filter="mountain">MOUNTAIN</button>
-                    </div>
-                </div>
 
-                <div class="control-row filters">
-                    <label>SNOW CONDITIONS</label>
-                    <div class="filter-toggles">
-                        <button class="filter-btn" data-filter="snow_none">NO SNOW</button>
-                        <button class="filter-btn" data-filter="snow_some">SOME SNOW</button>
-                    </div>
-                </div>
+            <!-- Collapsible Filters Panel -->
+            <div class="filters-panel" id="filters-panel">
+                <button class="filters-toggle" id="filters-toggle" aria-expanded="true">
+                    <span id="filters-toggle-label">FILTERS</span>
+                    <span class="filters-toggle-icon" id="filters-toggle-icon">▲</span>
+                </button>
+                <div class="filters-body" id="filters-body">
+                    <div class="controls-section">
+                        <div class="control-row">
+                            <label for="date-picker">DATE OF VISIT</label>
+                            <input type="date" id="date-picker" class="input-modern" />
+                        </div>
+                        
+                        <div class="control-row filters">
+                            <label>AMENITIES REQUIRED</label>
+                            <div class="filter-toggles">
+                                <button class="filter-btn" data-filter="roof">SHELTER</button>
+                                <button class="filter-btn" data-filter="wood">WOOD</button>
+                                <button class="filter-btn" data-filter="grate">GRATE</button>
+                                <button class="filter-btn" data-filter="mountain">MOUNTAIN</button>
+                            </div>
+                        </div>
 
-                <div class="control-row filters">
-                    <label>WEATHER FORECAST</label>
-                    <div style="display: flex; gap: 8px; margin-bottom: 8px; flex-wrap: wrap;">
-                        <button class="filter-btn" data-filter="weather_sunny">SUNNY</button>
-                        <button class="filter-btn" data-filter="weather_cloudy">CLOUDY</button>
-                        <button id="apply-weather-filter" class="btn-primary" style="margin-left: auto;">APPLY</button>
+                        <div class="control-row filters">
+                            <label>SNOW CONDITIONS</label>
+                            <div class="filter-toggles">
+                                <button class="filter-btn" data-filter="snow_none">NO SNOW</button>
+                                <button class="filter-btn" data-filter="snow_some">SOME SNOW</button>
+                            </div>
+                        </div>
+
+                        <div class="control-row filters">
+                            <label>WEATHER FORECAST</label>
+                            <div class="filter-toggles" style="flex-wrap: wrap;">
+                                <button class="filter-btn" data-filter="weather_sunny">SUNNY</button>
+                                <button class="filter-btn" data-filter="weather_cloudy">CLOUDY</button>
+                                <button id="apply-weather-filter" class="btn-primary" style="margin-left: auto;">APPLY</button>
+                            </div>
+                            <p class="help-text">Filters apply to spots currently visible on map.</p>
+                        </div>
                     </div>
-                    <p class="help-text">Filters apply to spots currently visible on map.</p>
                 </div>
             </div>
 
+            <!-- Spot Details: always visible when a spot is selected -->
             <div id="spot-details" class="spot-details hidden">
                 <h2 id="spot-title">SELECT A SPOT</h2>
-                <div style="display: flex; gap: 16px; margin-bottom: 24px;">
+                <div class="spot-links">
                     <a id="spot-gps" href="#" target="_blank" class="gps-link">Maps ↗</a>
                     <a id="spot-osm" href="#" target="_blank" class="gps-link">OSM ↗</a>
                     <a id="spot-weather" href="#" target="_blank" class="gps-link hidden">Weather ↗</a>
@@ -86,7 +100,7 @@
                 
                 <div style="margin-top: 16px;">
                     <span class="label">OSM RAW PAYLOAD</span>
-                    <pre id="spot-raw-payload" style="background: var(--white); color: var(--black); padding: 8px; font-size: 8px; overflow-x: auto; max-height: 150px; border: 1px solid var(--black); white-space: pre-wrap; word-wrap: break-word;"></pre>
+                    <pre id="spot-raw-payload" style="background: var(--white); color: var(--black); padding: 8px; font-size: 8px; overflow-x: auto; max-height: 100px; border: 1px solid var(--black); white-space: pre-wrap; word-wrap: break-word;"></pre>
                 </div>
             </div>
             
@@ -122,6 +136,6 @@
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
     
     <!-- App Logic -->
-    <script src="app.js"></script>
+    <script src="app.js?v=3"></script>
 </body>
 </html>

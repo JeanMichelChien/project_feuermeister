@@ -45,6 +45,23 @@ const mapContainer = document.getElementById('map-container');
 const listContainer = document.getElementById('list-container');
 const listItemsWrapper = document.getElementById('list-items');
 
+// Collapsible Filters Panel
+const filtersPanel = document.getElementById('filters-panel');
+const filtersToggleBtn = document.getElementById('filters-toggle');
+const filtersToggleIcon = document.getElementById('filters-toggle-icon');
+
+filtersToggleBtn.addEventListener('click', () => {
+    const isCollapsed = filtersPanel.classList.toggle('collapsed');
+    document.getElementById('sidebar').classList.toggle('collapsed', isCollapsed);
+});
+
+function collapseFiltersOnMobile() {
+    if (window.innerWidth <= 768 && !filtersPanel.classList.contains('collapsed')) {
+        filtersPanel.classList.add('collapsed');
+        document.getElementById('sidebar').classList.add('collapsed');
+    }
+}
+
 // Initialize Date Picker
 const today = new Date();
 datePicker.value = today.toISOString().split('T')[0];
@@ -337,6 +354,9 @@ async function loadSpotDetails(node, marker) {
     
     document.getElementById('initial-state').classList.add('hidden');
     document.getElementById('spot-details').classList.remove('hidden');
+
+    // On mobile: collapse filters so spot details are immediately visible
+    collapseFiltersOnMobile();
     
     document.getElementById('spot-title').innerText = (node.tags.name || 'Feuerstelle').toUpperCase();
     
