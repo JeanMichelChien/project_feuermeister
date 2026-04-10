@@ -2,18 +2,49 @@ import urllib.request
 import urllib.parse
 import json
 import time
+import sys
+import os
 
-print("Fetching grill/firepit spots from Overpass API (Full Switzerland 6x6 Tiled - Extreme Resilience)...")
+# Country BBox and Grid Config
+COUNTRY_CONFIG = {
+    'switzerland': {
+        'min_lat': 45.8, 'max_lat': 47.8,
+        'min_lon': 5.9, 'max_lon': 10.5,
+        'grid_rows': 6, 'grid_cols': 6,
+        'name_full': 'Switzerland'
+    },
+    'france': {
+        'min_lat': 41.3, 'max_lat': 51.1,
+        'min_lon': -5.1, 'max_lon': 9.6,
+        'grid_rows': 50, 'grid_cols': 50, # Extra large grid for France
+        'name_full': 'France'
+    }
+}
 
-# Full Switzerland Bounds
-min_lat, max_lat = 45.8, 47.8
-min_lon, max_lon = 5.9, 10.5
+# Select country
+country_key = sys.argv[1].lower() if len(sys.argv) > 1 else 'switzerland'
+if country_key not in COUNTRY_CONFIG:
+    print(f"Error: Unknown country '{country_key}'. Available: {', '.join(COUNTRY_CONFIG.keys())}")
+    sys.exit(1)
 
-# 6x6 Grid - smaller tiles avoid 504 timeouts on busy servers
-lat_step = (max_lat - min_lat) / 6
-lon_step = (max_lon - min_lon) / 6
+config = COUNTRY_CONFIG[country_key]
+print(f"\n--- FeuerMeister Data Fetcher: {config['name_full']} ---")
+print(f"BBox: {config['min_lat']},{config['min_lon']} to {config['max_lat']},{config['max_lon']}")
+print(f"Grid: {config['grid_rows']}x{config['grid_cols']} ({config['grid_rows'] * config['grid_cols']} tiles)")
 
-all_spots = {} # Use dict keyed by ID for deduplication
+all_spots = {}
+
+# Load existing spots for merging (deduplication by ID)
+output_file = 'spots.json'
+if os.path.exists(output_file):
+    try:
+        with open(output_file, 'r') as f:
+            existing_spots = json.load(f)
+            for spot in existing_spots:
+                all_spots[spot['id']] = spot
+        print(f"Loaded {len(existing_spots)} existing spots from {output_file} for merging.")
+    except Exception as e:
+        print(f"Warning: Could not load existing spots.json ({e}). Starting fresh.")
 
 def fetch_tile(bbox_str, name):
     query = f"""
@@ -25,7 +56,6 @@ def fetch_tile(bbox_str, name):
     out body;
     """
     
-    # Try LZ4 first, then fallback to others
     servers = [
         "https://lz4.overpass-api.de/api/interpreter",
         "https://overpass-api.de/api/interpreter",
@@ -48,18 +78,24 @@ def fetch_tile(bbox_str, name):
             time.sleep(20)
     return []
 
-for i in range(6):
-    for j in range(6):
+min_lat, max_lat = config['min_lat'], config['max_lat']
+min_lon, max_lon = config['min_lon'], config['max_lon']
+rows, cols = config['grid_rows'], config['grid_cols']
+
+lat_step = (max_lat - min_lat) / rows
+lon_step = (max_lon - min_lon) / cols
+
+for i in range(rows):
+    for j in range(cols):
         s = min_lat + (i * lat_step)
         n = s + lat_step
         w = min_lon + (j * lon_step)
         e = w + lon_step
-        bbox_str = f"{s},{w},{n},{e}"
+        bbox_str = f"{s:.6f},{w:.6f},{n:.6f},{e:.6f}"
         name = f"L{i}C{j}"
         
         nodes = fetch_tile(bbox_str, name)
         for node in nodes:
-            # Storage-efficient: keep only necessary fields
             clean_node = {
                 "type": node.get("type"),
                 "id": node.get("id"),
@@ -69,18 +105,17 @@ for i in range(6):
             }
             all_spots[node['id']] = clean_node
         
-        # Polite gap
-        print(f"     Cooling down for 10s...")
-        time.sleep(10)
+        # Polite gap only if we have more tiles to fetch
+        if i * cols + j < rows * cols - 1:
+            print(f"     Cooling down for 5s...")
+            time.sleep(5)
 
-# Convert back to list
+# Convert to list and save
 spots_list = list(all_spots.values())
 
-output_file = 'spots.json'
 with open(output_file, 'w') as f:
-    # Pretty-print with minimal indentation for balance between readability and size
-    json.dump(spots_list, f, indent=2)
+    # Minified JSON output for storage efficiency
+    json.dump(spots_list, f, separators=(',', ':'))
     
 print(f"\nSuccessfully saved {len(spots_list)} total spots to {output_file}.")
-print(f"Data is pretty-printed and stripped of unnecessary metadata.")
-print(f"Switzerland coverage is complete (including Zürich).")
+print(f"Data is MINIFIED and deduplicated.")
