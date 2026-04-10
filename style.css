@@ -119,6 +119,7 @@ label {
 .filter-toggles {
     display: flex;
     gap: 8px;
+    flex-wrap: wrap;
 }
 
 .filter-btn, .btn-primary, .toggle-btn {
@@ -350,4 +351,88 @@ label {
 .custom-marker:hover, .custom-marker.active {
     background: var(--ch-red);
     color: var(--white);
+}
+
+/* Mobile Responsive Adjustments */
+@media (max-width: 768px) {
+    body {
+        overflow: hidden;
+    }
+
+    #app {
+        flex-direction: column;
+        height: 100dvh;
+        overflow: hidden;
+    }
+
+    /* Map on top, taking most of the screen */
+    #main-content {
+        height: 65dvh;
+        width: 100%;
+        flex-shrink: 0;
+        order: 1;
+    }
+
+    /* Sidebar below the map, scrollable */
+    .sidebar {
+        width: 100%;
+        height: 35dvh;
+        min-height: 0;
+        border-right: none;
+        border-top: 2px solid var(--black);
+        overflow-y: auto;
+        order: 2;
+        flex-shrink: 0;
+    }
+
+    .sidebar-header {
+        padding: 12px 16px;
+    }
+
+    .sidebar-header h1 {
+        font-size: 20px;
+    }
+
+    .controls-section {
+        padding: 12px 16px;
+    }
+
+    .control-row {
+        margin-bottom: 10px;
+    }
+
+    .spot-details {
+        padding: 12px 16px;
+    }
+
+    .dataset-grid {
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .view-toggles {
+        top: 12px;
+        right: 12px;
+    }
+
+    .view-toggles .toggle-btn {
+        padding: 6px 10px;
+        font-size: 10px;
+    }
+
+    .list-header {
+        font-size: 9px;
+        grid-template-columns: 2fr 1fr 1.5fr 1fr;
+        padding: 8px;
+    }
+
+    .list-item {
+        font-size: 11px;
+        grid-template-columns: 2fr 1fr 1.5fr 1fr;
+        padding: 10px 8px;
+    }
+
+    #list-container {
+        padding: 56px 12px 12px 12px;
+    }
 }

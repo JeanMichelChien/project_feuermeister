@@ -14,7 +14,7 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin=""/>
     
     <!-- Custom Styles -->
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css?v=2">
 </head>
 <body>
     <div id="app">
@@ -51,7 +51,7 @@
 
                 <div class="control-row filters">
                     <label>WEATHER FORECAST</label>
-                    <div style="display: flex; gap: 8px; margin-bottom: 8px;">
+                    <div style="display: flex; gap: 8px; margin-bottom: 8px; flex-wrap: wrap;">
                         <button class="filter-btn" data-filter="weather_sunny">SUNNY</button>
                         <button class="filter-btn" data-filter="weather_cloudy">CLOUDY</button>
                         <button id="apply-weather-filter" class="btn-primary" style="margin-left: auto;">APPLY</button>
