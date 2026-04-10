@@ -51,14 +51,12 @@ const filtersToggleBtn = document.getElementById('filters-toggle');
 const filtersToggleIcon = document.getElementById('filters-toggle-icon');
 
 filtersToggleBtn.addEventListener('click', () => {
-    const isCollapsed = filtersPanel.classList.toggle('collapsed');
-    document.getElementById('sidebar').classList.toggle('collapsed', isCollapsed);
+    filtersPanel.classList.toggle('collapsed');
 });
 
 function collapseFiltersOnMobile() {
     if (window.innerWidth <= 768 && !filtersPanel.classList.contains('collapsed')) {
         filtersPanel.classList.add('collapsed');
-        document.getElementById('sidebar').classList.add('collapsed');
     }
 }
 
