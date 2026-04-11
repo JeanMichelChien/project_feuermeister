@@ -16,7 +16,7 @@ COUNTRY_CONFIG = {
     'france': {
         'min_lat': 41.3, 'max_lat': 51.1,
         'min_lon': -5.1, 'max_lon': 9.6,
-        'grid_rows': 50, 'grid_cols': 50, # Extra large grid for France
+        'grid_rows': 20, 'grid_cols': 20, # Extra large grid for France
         'name_full': 'France'
     }
 }
