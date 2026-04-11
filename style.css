@@ -137,10 +137,14 @@ body {
     overflow: hidden;
 }
 
-/* Hide other sidebar content when filters are expanded for focus */
-.filters-panel:not(.collapsed) ~ #spot-details,
-.filters-panel:not(.collapsed) ~ #initial-state {
-    display: none !important;
+@media (min-width: 769px) {
+    .sidebar {
+        overflow-y: auto;
+    }
+
+    .spot-details {
+        overflow-y: auto;
+    }
 }
 
 /* ── Controls inside filters ─────────────────────────── */
@@ -474,6 +478,12 @@ label {
         overflow: hidden;
         order: 2;
         flex-shrink: 0;
+    }
+
+    /* On mobile, keep focus on filters while expanded. */
+    .filters-panel:not(.collapsed) ~ #spot-details,
+    .filters-panel:not(.collapsed) ~ #initial-state {
+        display: none !important;
     }
 
     .sidebar-header {

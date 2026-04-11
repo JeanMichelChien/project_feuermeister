@@ -1,20 +1,29 @@
 // Constants
-const CH_BOUNDS = [
-    [45.817, 5.955],
-    [47.808, 10.492]
+const APP_BOUNDS = [
+    [41.2, -5.5],
+    [51.5, 10.5]
+];
+
+const SWITZERLAND_VIEW_BOUNDS = [
+    [45.75, 5.9],
+    [47.95, 10.7]
 ];
 
 // Map Initialization - TopoMap for relief
 const map = L.map('map-container', {
-    maxBounds: CH_BOUNDS,
+    maxBounds: APP_BOUNDS,
     maxBoundsViscosity: 1.0,
-    minZoom: 8
-}).setView([46.8182, 8.2275], 8);
+    minZoom: 6
+});
 
 L.tileLayer('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png', {
     maxZoom: 17,
     attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OSM</a>, SRTM | Map style &copy; <a href="https://opentopomap.org">OpenTopoMap</a>'
 }).addTo(map);
+
+map.fitBounds(SWITZERLAND_VIEW_BOUNDS, {
+    padding: [24, 24]
+});
 
 // Application State
 let spotsData = [];
@@ -54,8 +63,8 @@ filtersToggleBtn.addEventListener('click', () => {
     filtersPanel.classList.toggle('collapsed');
 });
 
-function collapseFiltersOnMobile() {
-    if (window.innerWidth <= 768 && !filtersPanel.classList.contains('collapsed')) {
+function collapseFiltersForSpotSelection() {
+    if (!filtersPanel.classList.contains('collapsed')) {
         filtersPanel.classList.add('collapsed');
     }
 }
@@ -353,8 +362,8 @@ async function loadSpotDetails(node, marker) {
     document.getElementById('initial-state').classList.add('hidden');
     document.getElementById('spot-details').classList.remove('hidden');
 
-    // On mobile: collapse filters so spot details are immediately visible
-    collapseFiltersOnMobile();
+    // On selection, retract filters so details are visible on desktop and mobile.
+    collapseFiltersForSpotSelection();
     
     document.getElementById('spot-title').innerText = (node.tags.name || 'Feuerstelle').toUpperCase();
     
